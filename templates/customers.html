@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers - Cereal Mart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .btn {
+            margin: 5px; /* Add uniform spacing */
+        }
+    
+        .btn-calculate-discount {
+            background-color: #17a2b8; /* Light blue for Calculate Discount */
+            color: white;
+        }
+    
+        .btn-calculate-discount:hover {
+            background-color: #138496; /* Darker shade for hover effect */
+        }
+    
+        .btn-total-quantity {
+            background-color: #28a745; /* Green for Total Quantity Purchased */
+            color: white;
+        }
+    
+        .btn-total-quantity:hover {
+            background-color: #218838; /* Darker shade for hover effect */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container mt-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/employees">Employees</a>
+                    <a class="nav-link" href="/customers">Customers</a>
+                    <a class="nav-link" href="/products">Products</a>
+                    <a class="nav-link" href="/orders">Orders</a>
+                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                </div>
+            </div>
+        </nav>
+
+        <h1 class="mb-4">Customers List</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                        <td>
+                            <a href="/edit_customer/{{ row[0] }}" class="btn btn-warning btn-sm">Edit</a>
+            <a href="/delete_customer/{{ row[0] }}" class="btn btn-danger btn-sm"
+               onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
+            <button class="btn btn-calculate-discount btn-sm" onclick="calculateDiscount('{{ row[0] }}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Loyal customers get a 5% discount if their total spending exceeds 500.">Calculate Discount</button>
+            <button class="btn btn-total-quantity btn-sm" onclick="totalQuantityPurchased('{{ row[0] }}')">Total Amount Purchased</button>
+            <input type="text" id="result-{{ row[0] }}" class="form-control d-inline" style="width: 200px;" placeholder="Result" readonly>
+            <div id="discount-message-{{ row[0] }}" class="mt-2"></div> <!-- Placeholder for the message -->
+                        </td>
+                        
+                        
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2 class="mb-0">Add New Customer</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/add_customer" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" 
+                               required pattern="[A-Za-z ]+" title="Only letters and spaces allowed">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" 
+                               required pattern="[A-Za-z ]+" title="Only letters and spaces allowed">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="tel" class="form-control" id="contactNumber" name="contactNumber" 
+                               required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" required rows="1"></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Add Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateDiscount(customerId) {
+            fetch(`/calculate_discount/${customerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const messageDiv = document.getElementById(`discount-message-${customerId}`);
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        messageDiv.innerHTML = `<div class="alert alert-danger">Error calculating discount: ${data.error}</div>`;
+                    } else {
+                        console.log('Discount:', data.discount);
+                        document.getElementById(`result-${customerId}`).value = `Discount: ${data.discount}`;
+                        messageDiv.innerHTML = `<div class="alert alert-info">Loyal customers get a 5% discount if their total spending exceeds 500.</div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    const messageDiv = document.getElementById(`discount-message-${customerId}`);
+                    messageDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                });
+        }
+    
+        function totalQuantityPurchased(customerId) {
+            fetch(`/total_quantity_purchased_ajax/${customerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json(); // Parse JSON response
+                })
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`result-${customerId}`).value = `Total: $ ${data.result}`;
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => alert('Error: ' + error.message));
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/customers.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee - Cereal Mart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/employees">Employees</a>
+                    <a class="nav-link" href="/customers">Customers</a>
+                    <a class="nav-link" href="/products">Products</a>
+                    <a class="nav-link" href="/orders">Orders</a>
+                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Employee</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_employee') }}" class="row g-3">
+                    <input type="hidden" name="employeeId" value="{{ employee[0] }}">
+
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" 
+                               value="{{ employee[1] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" 
+                               value="{{ employee[2] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="jobPosition" class="form-label">Job Position</label>
+                        <input type="text" class="form-control" id="jobPosition" name="jobPosition" 
+                               value="{{ employee[3] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="salary" class="form-label">Salary</label>
+                        <input type="number" class="form-control" id="salary" name="salary" 
+                               value="{{ employee[4] }}" required min="0" step="0.01">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contactNumber" name="contactNumber" 
+                               value="{{ employee[5] }}" required pattern="[0-9]{10}" title="Enter a valid 10-digit number">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ employee[6] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="hireDate" class="form-label">Hire Date</label>
+                        <input type="date" class="form-control" id="hireDate" name="hireDate" 
+                               value="{{ employee[7] }}" required>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{{ url_for('employees') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

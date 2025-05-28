@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order - Cereal Mart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/employees">Employees</a>
+                    <a class="nav-link" href="/customers">Customers</a>
+                    <a class="nav-link" href="/products">Products</a>
+                    <a class="nav-link" href="/orders">Orders</a>
+                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Edit Order</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_order') }}" class="row g-3">
+                    <input type="hidden" name="orderId" value="{{ order[0] }}">
+                    
+                    <div class="col-md-6">
+                        <label for="customer_id" class="form-label">Customer ID</label>
+                        <input type="number" class="form-control" id="customer_id" name="customer_id" 
+                               value="{{ order[1] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="orderDate" class="form-label">Order Date</label>
+                        <input type="text" class="form-control" id="orderDate" name="orderDate" 
+                               value="{{ order[2].strftime('%d - %b - %Y') }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="totalAmount" class="form-label">Total Amount</label>
+                        <input type="number" class="form-control" id="totalAmount" name="totalAmount" 
+                               value="{{ order[3] }}" required step="0.01">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="paymentStatus" class="form-label">Payment Status</label>
+                        <select class="form-select" id="paymentStatus" name="paymentStatus" required>
+                            <option value="Paid" {% if order[4] == 'Paid' %}selected{% endif %}>Paid</option>
+                            <option value="Pending" {% if order[4] == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Failed" {% if order[4] == 'Failed' %}selected{% endif %}>Failed</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="orderStatus" class="form-label">Order Status</label>
+                        <select class="form-select" id="orderStatus" name="orderStatus" required>
+                            <option value="Processing" {% if order[5] == 'Processing' %}selected{% endif %}>Processing</option>
+                            <option value="Shipped" {% if order[5] == 'Shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="Delivered" {% if order[5] == 'Delivered' %}selected{% endif %}>Delivered</option>
+                            <option value="Cancelled" {% if order[5] == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{{ url_for('orders') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

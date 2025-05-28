@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer - Cereal Mart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/employees">Employees</a>
+                    <a class="nav-link" href="/customers">Customers</a>
+                    <a class="nav-link" href="/products">Products</a>
+                    <a class="nav-link" href="/orders">Orders</a>
+                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Customer</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_customer') }}" class="row g-3">
+                    <input type="hidden" name="customerId" value="{{ customer[0] }}">
+                    
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" 
+                               value="{{ customer[1] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" 
+                               value="{{ customer[2] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contactNumber" name="contactNumber" 
+                               value="{{ customer[3] }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" 
+                               value="{{ customer[4] }}" required>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{{ url_for('customers') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
