@@ -1,0 +1,39 @@
+# Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database files
+*.sqlite3
+
+# Virtual environment folders
+venv/
+env/
+.venv/
+
+# VS Code settings folder
+.vscode/
+
+# Flask instance folder (used for config, secrets)
+instance/
+
+# Environment variables file
+.env
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Pytest cache
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
